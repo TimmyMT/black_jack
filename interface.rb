@@ -15,11 +15,12 @@ until diller.money <= 0 || player.money <= 0
   bank = set_money * 2
 
   puts "Ставки сделаны"
-  player.start; diller.start
+  player.start
+  diller.start
 
   puts "Первая карта диллера (#{diller.current_karts[0]})"
   print "Ваши карты ("
-  player.current_karts.each {|k| print "#{k} " }
+  player.current_karts.each {|k| print "#{k} "}
   print ") Очки: #{player.points}\n"
 
   puts "Выберите действие: 1 - Пас, 2 - Взять ещё карту"
@@ -28,7 +29,7 @@ until diller.money <= 0 || player.money <= 0
   if player.points < 21 && action == 2
     player.add_kart
     print "Ваши карты ("
-    player.current_karts.each {|k| print "#{k} " }
+    player.current_karts.each {|k| print "#{k} "}
     print ") Очки: #{player.points}"
     puts " "
   elsif player.points >= 21 && action == 2
@@ -42,10 +43,10 @@ until diller.money <= 0 || player.money <= 0
 
   puts "Вскрываем карты"
   print "Карты диллера ("
-  diller.current_karts.each {|k| print "#{k} " }
+  diller.current_karts.each {|k| print "#{k} "}
   print ") Очки: #{diller.points}\n"
   print "Ваши карты ("
-  player.current_karts.each {|k| print "#{k} " }
+  player.current_karts.each {|k| print "#{k} "}
   print ") Очки: #{player.points}\n"
 
   if player.points > diller.points && player.points <= 21 || diller.points > 21 && player.points <= 21
