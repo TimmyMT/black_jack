@@ -5,8 +5,10 @@ diller = User.new
 deck = Deck.new
 bank = Bank.new
 table = Table.new(player, diller, deck, bank)
+print "Введите имя: "
+name = gets.chomp
 
-puts "Здравствуйте! У вас #{player.money} фишек"
+puts "\nЗдравствуйте #{name}! У вас #{player.money} фишек"
 
 loop do
   puts "\nДелайте ставку!"
