@@ -12,7 +12,7 @@ loop do
   puts "\nДелайте ставку!"
   give = gets.chomp.to_i
   table.ante(give)
-  puts "Вы сделали ставку #{give}, банк содержит #{bank.money} фишек"
+  puts "Ставка сделана, банк содержит #{bank.money} фишек"
   table.start
 
   puts "\nПервая карта диллера: #{diller.cards[0]}"

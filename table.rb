@@ -16,9 +16,19 @@ class Table
   end
 
   def ante(value)
-    @bank.money += value * 2
-    @player.money -= value
-    @diller.money -= value
+    if value <= @player.money && value <= @diller.money
+      @bank.money += value * 2
+      @player.money -= value
+      @diller.money -= value
+    elsif value > @diller.money
+      puts "У диллера нету сколько фишек, введите другую сумму"
+      new_value = gets.chomp.to_i
+      self.ante(new_value)
+    elsif value > @player.money
+      puts "У вас нету столько фишек, введите другую сумму"
+      new_value = gets.chomp.to_i
+      self.ante(new_value)
+    end
   end
 
   def start
@@ -26,6 +36,7 @@ class Table
       @player.cards.clear
       @diller.cards.clear
       @round_cards = []
+
       4.times do
         loop do
           random_card = @deck.cards.sample
@@ -35,6 +46,7 @@ class Table
           end
         end
       end
+
       @player.cards << @round_cards[0]
       @player.cards << @round_cards[1]
       @diller.cards << @round_cards[2]
@@ -69,12 +81,12 @@ class Table
 
     if @player.points <= 21 && (@diller.points < @player.points || @diller.points > 21)
       @player.money += @bank.money
-      puts "Вы выйграли"
+      puts "Вы выйграли +#{@bank.money}"
     elsif @diller.points <= 21 && (@player.points < @diller.points || @player.points > 21)
       @diller.money += @bank.money
-      puts "Диллер выйграл"
+      puts "Диллер выйграл -#{@bank.money}"
     elsif (@player.points == @diller.points) || (@player.points > 21 && @diller.points > 21)
-      puts "Ничья"
+      puts "Ничья +#{@bank.money / 2}"
       @player.money += @bank.money / 2
       @diller.money += @bank.money / 2
     end

@@ -17,7 +17,7 @@ module PointsCounter
     if user.points > 21
       user.cards.each do |c|
         if c.chop == 'A'
-          user.points -= 9
+          user.points -= 10
         end
       end
     end
