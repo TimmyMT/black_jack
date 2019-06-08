@@ -1,10 +1,6 @@
 require_relative 'user.rb'
 require_relative 'deck.rb'
 require_relative 'bank.rb'
-# Deck.generate
-# @@pl = User.new
-# @@dl = User.new
-# @@bnk = Bank.new
 
 class Table
 
@@ -44,18 +40,10 @@ class Table
         break if @round_cards.count == 4
       end
 
-      # @round_cards.each do |c|
-      #   print "#{c.card} "
-      # end
-      # puts " "
-
       @dillder.cards << @round_cards[0]
       @dillder.cards << @round_cards[1]
       @player.cards << @round_cards[2]
       @player.cards << @round_cards[3]
-
-      # puts "Diller cards: #{@dillder.cards[0].card} #{@dillder.cards[1].card}"
-      # puts "Player cards: #{@player.cards[0].card} #{@player.cards[1].card}"
     else
       raise "Bank is empty"
     end
@@ -89,22 +77,6 @@ class Table
       @dillder.money += @bank.money / 2
       @winner = 3
     end
-
-    # @bank.money = 0
-
-    # print "Diller cards: "
-    # @dillder.cards.each do |c|
-    #   print "#{c.card} "
-    # end
-    # print " Points: #{@dillder.points}"
-    # puts " "
-    #
-    # print "Diller cards: "
-    # @player.cards.each do |c|
-    #   print "#{c.card} "
-    # end
-    # print " Points: #{@player.points}"
-    # puts " "
   end
 
 end
