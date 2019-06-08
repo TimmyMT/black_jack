@@ -1,11 +1,11 @@
 require_relative 'table.rb'
 
 player = User.new
-diller = User.new
+dealer = User.new
 Deck.generate
 bank = Bank.new
 
-table = Table.new(player, diller, bank)
+table = Table.new(player, dealer, bank)
 print "Введите имя: "
 name = gets.chomp
 puts "Здравствуйте #{name}! У вас #{player.money} фишек"
@@ -15,13 +15,13 @@ loop do
   ante = gets.chomp.to_i
   table.ante(ante)
   table.start
-  puts "Карты диллера: #{diller.cards[0].card} ** "
+  puts "Карты диллера: #{dealer.cards[0].card} ** "
   print "Ваши карты: "
   player.cards.each do |c|
     print "#{c.card} "
   end
   player.score
-  diller.score
+  dealer.score
 
   puts "\n1# Взять ещё карту? 2# Пас 3# Вскрыть карты"
   action = gets.chomp.to_i
@@ -29,22 +29,24 @@ loop do
     table.add_card(player)
     puts "Вы взяли карту"
   end
-
-  if diller.points < 17 && (action == 1 || action == 2)
-    table.add_card(diller)
+  if action == 1 || action == 2
+    table.dealer_take_card
+    puts "Диллер взял карту" if dealer.cards.count > 2
   end
 
   table.open_cards
   print "Карты диллера: "
-  diller.cards.each do |c|
+  dealer.cards.each do |c|
     print "#{c.card} "
   end
-  print "Очки: #{diller.points}\n"
+  print "Очки: #{dealer.points}\n"
   print "Ваши карты: "
   player.cards.each do |c|
     print "#{c.card} "
   end
   print "Очки: #{player.points}\n"
+
+  table.who_winner
 
   if table.winner == 1
     puts "Вы выйграли +#{bank.money}"
@@ -54,13 +56,13 @@ loop do
     puts "Ничья, фишки возвращаются"
   end
 
-  puts "Фишки диллера #{diller.money}"
+  puts "Фишки диллера #{dealer.money}"
   puts "Ваши фишки #{player.money}"
-  break if player.money <= 0 || diller.money <= 0
+  break if player.money <= 0 || dealer.money <= 0
 end
 
 if player.money <= 0
   puts "Ваши фишки закончились"
-elsif diller.money <= 0
+elsif dealer.money <= 0
   puts "Фишки диллера закончились"
 end

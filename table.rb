@@ -4,34 +4,37 @@ require_relative 'bank.rb'
 
 class Table
 
-  attr_accessor :player, :diller, :round_cards, :bank
+  attr_accessor :player, :dealer, :round_cards, :bank
   attr_reader :winner
 
-  def initialize(player, diller, bank)
+  def initialize(player, dealer, bank)
     @player = player
-    @dillder = diller
+    @dealer = dealer
     @bank = bank
   end
 
   def ante(value)
-    if @player.money >= value && @dillder.money >= value
+    if @player.money >= value && @dealer.money >= value
       @bank.money = 0
       @bank.money += value * 2
-      @dillder.money -= value
+      @dealer.money -= value
       @player.money -= value
     else
       raise "Not enough money"
     end
   end
 
+  def round_clear
+    @player.points = 0
+    @dealer.points = 0
+    @dealer.cards.clear
+    @player.cards.clear
+    @round_cards = []
+  end
+
   def start
     if @bank.money > 0
-      @player.points = 0
-      @dillder.points = 0
-      @dillder.cards.clear
-      @player.cards.clear
-      @round_cards = []
-
+      self.round_clear
       loop do
         random_card = Deck.cards.sample
         unless @round_cards.include?(random_card)
@@ -40,8 +43,8 @@ class Table
         break if @round_cards.count == 4
       end
 
-      @dillder.cards << @round_cards[0]
-      @dillder.cards << @round_cards[1]
+      @dealer.cards << @round_cards[0]
+      @dealer.cards << @round_cards[1]
       @player.cards << @round_cards[2]
       @player.cards << @round_cards[3]
     else
@@ -62,19 +65,27 @@ class Table
     end
   end
 
-  def open_cards
-    @dillder.score
-    @player.score
+  def dealer_take_card
+    if @dealer.points < 17
+      self.add_card(@dealer)
+    end
+  end
 
-    if @player.points <= 21 && (@dillder.points < @player.points || @dillder.points > 21)
+  def open_cards
+    @dealer.score
+    @player.score
+  end
+
+  def who_winner
+    if @player.points <= 21 && (@dealer.points < @player.points || @dealer.points > 21)
       @player.money += @bank.money
       @winner = 1
-    elsif @dillder.points <= 21 && (@player.points < @dillder.points || @player.points > 21)
-      @dillder.money += @bank.money
+    elsif @dealer.points <= 21 && (@player.points < @dealer.points || @player.points > 21)
+      @dealer.money += @bank.money
       @winner = 2
-    elsif (@dillder.points == @player.points) || (@dillder.points > 21 && @player.points > 21)
+    elsif (@dealer.points == @player.points) || (@dealer.points > 21 && @player.points > 21)
       @player.money += @bank.money / 2
-      @dillder.money += @bank.money / 2
+      @dealer.money += @bank.money / 2
       @winner = 3
     end
   end
