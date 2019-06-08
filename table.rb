@@ -1,11 +1,6 @@
 require_relative 'user.rb'
 require_relative 'deck.rb'
 require_relative 'bank.rb'
-# @@pl = User.new
-# @@dl = User.new
-# @@bnk = Bank.new
-# @@dck = Deck.new
-# @@dck.generate
 
 class Table
 
