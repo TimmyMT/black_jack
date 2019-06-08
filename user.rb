@@ -7,20 +7,25 @@ class User
     @points = 0
   end
 
+  def take_card(card)
+    if @cards.count < 3
+      @cards << card
+    else
+      raise "This user already have 3 cards"
+    end
+  end
+
   def score
     @points = 0
     have_a = false
     @cards.each do |card|
-      # check_card = c.card.chop
-      if %w[J Q K].include?(card)
-      # if (check_card ==  'J') || (check_card ==  'Q') || (check_card ==  'K')
+      if %w[J Q K].include?(card.value)
         @points += 10
-      elsif %w[A].include?(card)
-      # elsif check_card == "A"
+      elsif %w[A].include?(card.value)
         @points += 11
         have_a = true
       else
-        @points += card.card.chop.to_i #check_card.to_i
+        @points += card.value.to_i
       end
     end
     @points -= 10 if @points > 21 && have_a == true

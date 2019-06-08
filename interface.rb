@@ -2,67 +2,68 @@ require_relative 'table.rb'
 
 player = User.new
 dealer = User.new
-Deck.generate
 bank = Bank.new
+deck = Deck.new
+deck.generate
+table = Table.new(player, dealer, bank, deck)
 
-table = Table.new(player, dealer, bank)
 print "Введите имя: "
 name = gets.chomp
 puts "Здравствуйте #{name}! У вас #{player.money} фишек"
 
 loop do
-  puts "Делайте ставку"
-  ante = gets.chomp.to_i
-  table.ante(ante)
+  puts "Делайте ставку!"
+  money = gets.chomp.to_i
+  table.set_money(money)
+  puts "Ставка принята! В банке #{bank.money} фишек"
   table.start
-  puts "Карты диллера: #{dealer.cards[0].card} ** "
+  puts "Карты диллера: #{dealer.cards[0].value}#{dealer.cards[0].mastie} **"
   print "Ваши карты: "
-  player.cards.each do |c|
-    print "#{c.card} "
+  player.cards.each do |card|
+    print "#{card.value}#{card.mastie} "
   end
-  player.score
-  dealer.score
-
-  puts "\n1# Взять ещё карту? 2# Пас 3# Вскрыть карты"
+  print "Очки: #{player.points}"
+  puts " "
+  puts "1# Взять ещё карту? 2# Пас 3# Вскрыть карты"
   action = gets.chomp.to_i
-  if action == 1
-    table.add_card(player)
-    puts "Вы взяли карту"
-  end
-  if action == 1 || action == 2
-    table.dealer_take_card
-    puts "Диллер взял карту" if dealer.cards.count > 2
-  end
+  table.take_again(player) if action == 1
+  table.take_again_dealer if action == 1 || action == 2
+  puts "Диллер взял карту" if dealer.cards.count > 2
+  table.show
 
-  table.open_cards
   print "Карты диллера: "
-  dealer.cards.each do |c|
-    print "#{c.card} "
+  dealer.cards.each do |card|
+    print "#{card.value}#{card.mastie} "
   end
-  print "Очки: #{dealer.points}\n"
+  print "Очки: #{dealer.points}"
+  puts " "
   print "Ваши карты: "
-  player.cards.each do |c|
-    print "#{c.card} "
+  player.cards.each do |card|
+    print "#{card.value}#{card.mastie} "
   end
-  print "Очки: #{player.points}\n"
+  print "Очки: #{player.points}"
+  puts " "
 
   table.who_winner
+  table.pay_money
 
   if table.winner == 1
     puts "Вы выйграли +#{bank.money}"
   elsif table.winner == 2
     puts "Вы проиграли -#{bank.money}"
-  elsif table.winner == 3
-    puts "Ничья, фишки возвращаются"
+  elsif
+  puts "Ничья! Возврат фишек"
   end
 
-  puts "Фишки диллера #{dealer.money}"
-  puts "Ваши фишки #{player.money}"
+  puts "Фишки диллера: #{dealer.money}"
+  puts "Ваши фишки: #{player.money}"
+
+  table.clear_round
   break if player.money <= 0 || dealer.money <= 0
 end
 
 if player.money <= 0
-  puts "Ваши фишки закончились"
+  puts "У вас закончились фишки"
 elsif dealer.money <= 0
-  puts "Фишки диллера закончились"
+  puts "У диллера закончились фишки"
 end

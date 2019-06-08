@@ -1,32 +1,24 @@
+require_relative 'card.rb'
+
 class Deck
   MASTIES = ['♥', '♦', '♣', '♠']
   CARDS = ['2', '3', '4', '5', '6',
            '7', '8', '9', '10',
            'J', 'Q', 'K', 'A']
 
-  attr_reader :card
-  @@cards = []
+  attr_accessor :cards, :given_cards
 
-  def initialize(card, mastie)
-    @card = "#{card}#{mastie}"
+  def initialize
+    @cards = []
+    @given_cards = []
   end
 
-  def self.cards
-    @@cards
-  end
-
-  def self.generate
-    @@cards.clear
-    MASTIES.each do |m|
-      CARDS.each do |c|
-        @@cards << Deck.new(c, m)
+  def generate
+    MASTIES.each do |mastie|
+      CARDS.each do |value|
+        @cards << Card.new(value, mastie)
       end
     end
-    @@cards.count
-  end
-
-  def self.clear
-    @@cards.clear
   end
 
 end
