@@ -2,6 +2,7 @@ require_relative 'user.rb'
 require_relative 'deck.rb'
 require_relative 'bank.rb'
 
+# Some commetn for commit
 class Table
 
   attr_accessor :player, :dealer, :bank
