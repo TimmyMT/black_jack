@@ -1,97 +1,110 @@
 require_relative 'user.rb'
 require_relative 'deck.rb'
-require_relative 'points_counter.rb'
 require_relative 'bank.rb'
+# Deck.generate
+# @@pl = User.new
+# @@dl = User.new
+# @@bnk = Bank.new
 
 class Table
-  include PointsCounter
 
-  attr_accessor :deck, :player, :diller, :bank, :round_cards
+  attr_accessor :player, :diller, :round_cards, :bank
+  attr_reader :winner
 
-  def initialize(player, diller, deck, bank)
+  def initialize(player, diller, bank)
     @player = player
-    @diller = diller
-    @deck = deck
+    @dillder = diller
     @bank = bank
   end
 
   def ante(value)
-    if value <= @player.money && value <= @diller.money
+    if @player.money >= value && @dillder.money >= value
+      @bank.money = 0
       @bank.money += value * 2
+      @dillder.money -= value
       @player.money -= value
-      @diller.money -= value
-    elsif value > @diller.money
-      puts "У диллера нету сколько фишек, введите другую сумму"
-      new_value = gets.chomp.to_i
-      self.ante(new_value)
-    elsif value > @player.money
-      puts "У вас нету столько фишек, введите другую сумму"
-      new_value = gets.chomp.to_i
-      self.ante(new_value)
+    else
+      raise "Not enough money"
     end
   end
 
   def start
     if @bank.money > 0
+      @player.points = 0
+      @dillder.points = 0
+      @dillder.cards.clear
       @player.cards.clear
-      @diller.cards.clear
       @round_cards = []
 
-      4.times do
-        loop do
-          random_card = @deck.cards.sample
-          unless @round_cards.include?(random_card)
-            @round_cards << random_card
-            break
-          end
+      loop do
+        random_card = Deck.cards.sample
+        unless @round_cards.include?(random_card)
+          @round_cards << random_card
         end
+        break if @round_cards.count == 4
       end
 
-      @player.cards << @round_cards[0]
-      @player.cards << @round_cards[1]
-      @diller.cards << @round_cards[2]
-      @diller.cards << @round_cards[3]
+      # @round_cards.each do |c|
+      #   print "#{c.card} "
+      # end
+      # puts " "
 
-      points_count(@player)
-      points_count(@diller)
+      @dillder.cards << @round_cards[0]
+      @dillder.cards << @round_cards[1]
+      @player.cards << @round_cards[2]
+      @player.cards << @round_cards[3]
+
+      # puts "Diller cards: #{@dillder.cards[0].card} #{@dillder.cards[1].card}"
+      # puts "Player cards: #{@player.cards[0].card} #{@player.cards[1].card}"
+    else
+      raise "Bank is empty"
     end
   end
 
-  def count_p(user)
-    points_count(user)
-  end
-
   def add_card(user)
-    if user.cards.count != 3 && user.cards.count < 3
+    if user.cards.count < 3
       loop do
-        random_card = @deck.cards.sample
+        random_card = Deck.cards.sample
         unless @round_cards.include?(random_card)
           @round_cards << random_card
           user.cards << random_card
           break
         end
       end
-      points_count(user)
     end
   end
 
   def open_cards
-    points_count(@player)
-    points_count(@diller)
+    @dillder.score
+    @player.score
 
-    if @player.points <= 21 && (@diller.points < @player.points || @diller.points > 21)
+    if @player.points <= 21 && (@dillder.points < @player.points || @dillder.points > 21)
       @player.money += @bank.money
-      puts "Вы выйграли +#{@bank.money}"
-    elsif @diller.points <= 21 && (@player.points < @diller.points || @player.points > 21)
-      @diller.money += @bank.money
-      puts "Диллер выйграл -#{@bank.money}"
-    elsif (@player.points == @diller.points) || (@player.points > 21 && @diller.points > 21)
-      puts "Ничья +#{@bank.money / 2}"
+      @winner = 1
+    elsif @dillder.points <= 21 && (@player.points < @dillder.points || @player.points > 21)
+      @dillder.money += @bank.money
+      @winner = 2
+    elsif (@dillder.points == @player.points) || (@dillder.points > 21 && @player.points > 21)
       @player.money += @bank.money / 2
-      @diller.money += @bank.money / 2
+      @dillder.money += @bank.money / 2
+      @winner = 3
     end
 
-    @bank.money = 0
+    # @bank.money = 0
+
+    # print "Diller cards: "
+    # @dillder.cards.each do |c|
+    #   print "#{c.card} "
+    # end
+    # print " Points: #{@dillder.points}"
+    # puts " "
+    #
+    # print "Diller cards: "
+    # @player.cards.each do |c|
+    #   print "#{c.card} "
+    # end
+    # print " Points: #{@player.points}"
+    # puts " "
   end
 
 end

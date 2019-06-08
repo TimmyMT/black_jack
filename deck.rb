@@ -4,15 +4,29 @@ class Deck
            '7', '8', '9', '10',
            'J', 'Q', 'K', 'A']
 
-  attr_reader :cards
+  attr_reader :card
+  @@cards = []
 
-  def initialize
-    @cards = []
+  def initialize(card, mastie)
+    @card = "#{card}#{mastie}"
+  end
+
+  def self.cards
+    @@cards
+  end
+
+  def self.generate
+    @@cards.clear
     MASTIES.each do |m|
       CARDS.each do |c|
-        @cards << "#{c}#{m}"
+        @@cards << Deck.new(c, m)
       end
     end
+    @@cards.count
+  end
+
+  def self.clear
+    @@cards.clear
   end
 
 end
