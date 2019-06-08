@@ -20,6 +20,8 @@ loop do
   player.cards.each do |c|
     print "#{c.card} "
   end
+  player.score
+  diller.score
 
   puts "\n1# Взять ещё карту? 2# Пас 3# Вскрыть карты"
   action = gets.chomp.to_i
