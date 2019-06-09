@@ -1,7 +1,7 @@
 require_relative 'card.rb'
 
 class Deck
-  MASTIES = ['♥', '♦', '♣', '♠']
+  SUITS = ['♥', '♦', '♣', '♠']
   CARDS = ['2', '3', '4', '5', '6',
            '7', '8', '9', '10',
            'J', 'Q', 'K', 'A']
@@ -10,11 +10,10 @@ class Deck
 
   def initialize
     @cards = []
-    @given_cards = []
   end
 
   def generate
-    MASTIES.each do |mastie|
+    SUITS.each do |mastie|
       CARDS.each do |value|
         @cards << Card.new(value, mastie)
       end

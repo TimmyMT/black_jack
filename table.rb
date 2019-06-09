@@ -8,11 +8,12 @@ class Table
   attr_accessor :player, :dealer, :bank
   attr_reader :winner, :deck
 
-  def initialize(player, dealer, bank, deck)
-    @player = player
-    @dealer = dealer
-    @bank = bank
-    @deck = deck
+  def initialize
+    @player = User.new
+    @dealer = User.new
+    @bank = Bank.new
+    @deck = Deck.new
+    @deck.generate
   end
 
   def clear_round
@@ -37,7 +38,7 @@ class Table
         @deck.cards.delete(random_card)
       end
 
-      self.show
+      self.score_points
     else
       raise "Users cards not empty"
     end
@@ -47,25 +48,25 @@ class Table
     random_card = @deck.cards.sample
     user.take_card(random_card)
     @deck.cards.delete(random_card)
-    self.show
+    self.score_points
   end
 
   def take_again_dealer
     take_again(@dealer) if @dealer.points < 17
   end
 
-  def show
+  def score_points
     @dealer.score
     @player.score
   end
 
   def who_winner
     if @player.points <= 21 && (@dealer.points < @player.points || @dealer.points > 21)
-      @winner = 1
+      @winner = @player
     elsif @dealer.points <= 21 && (@player.points < @dealer.points || @player.points > 21)
-      @winner = 2
+      @winner = @dealer
     elsif @player.points == @dealer.points || @player.points > 21 && @player.points > 21
-      @winner = 3
+      @winner = nil
     end
   end
 
@@ -80,11 +81,11 @@ class Table
   end
 
   def pay_money
-    if @winner == 1
+    if @winner == @player
       @player.money += @bank.money
-    elsif @winner == 2
+    elsif @winner == @dealer
       @dealer.money += @bank.money
-    elsif @winner == 3
+    else
       @player.money += @bank.money / 2
       @dealer.money += @bank.money / 2
     end
