@@ -4,7 +4,7 @@ class Deck
   SUITS = %w[♥ ♦ ♣ ♠].freeze
   CARDS = %w[2 3 4 5 6 7 8 9 10 J Q K A].freeze
 
-  attr_accessor :cards, :given_cards
+  attr_accessor :cards
 
   def initialize
     @cards = []
@@ -17,5 +17,4 @@ class Deck
       end
     end
   end
-
 end
