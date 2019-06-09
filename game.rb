@@ -19,8 +19,12 @@ class Game
   def play
     loop do
       puts "Делайте ставку!"
-      money = gets.chomp.to_i
-      @table.set_money(money)
+      loop do
+        @money = gets.chomp.to_i
+        break if @table.player.money >= @money && @table.dealer.money >= @money
+        puts "Неверная сумма, введите ещё раз!"
+      end
+      @table.set_money(@money)
       puts "Ставка принята! В банке #{@table.bank.money} фишек"
       @table.start
       puts "Карты диллера: #{@table.dealer.cards[0].value}#{@table.dealer.cards[0].suit} **"
