@@ -1,8 +1,8 @@
 class User
   attr_accessor :money, :points, :cards, :name
 
-  def initialize
-    @name = nil
+  def initialize(name = '')
+    @name = name
     @money = 100
     @cards = []
     @points = 0

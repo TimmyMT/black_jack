@@ -8,8 +8,8 @@ class Table
   attr_accessor :player, :dealer, :bank
   attr_reader :winner, :deck
 
-  def initialize
-    @player = User.new
+  def initialize(name)
+    @player = User.new(name)
     @dealer = User.new
     @bank = Bank.new
     @deck = Deck.new

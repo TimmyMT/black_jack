@@ -1,10 +1,8 @@
 class Card
+  attr_accessor :value, :suit
 
-  attr_accessor :value, :mastie
-
-  def initialize(value, mastie)
+  def initialize(value, suit)
     @value = value
-    @mastie = mastie
+    @suit = suit
   end
-
 end

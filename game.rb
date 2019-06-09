@@ -3,13 +3,16 @@ require_relative 'table.rb'
 class Game
 
   def initialize
-    @table = Table.new
+    @table = Table.new(introduction)
+    start_game
+  end
+
+  def introduction
+    print "Введите имя: "
+    gets.chomp
   end
 
   def start_game
-    print "Введите имя: "
-    name = gets.chomp
-    @table.player.name = name
     puts "Здравствуйте #{@table.player.name}! У вас #{@table.player.money} фишек"
   end
 
@@ -20,10 +23,10 @@ class Game
       @table.set_money(money)
       puts "Ставка принята! В банке #{@table.bank.money} фишек"
       @table.start
-      puts "Карты диллера: #{@table.dealer.cards[0].value}#{@table.dealer.cards[0].mastie} **"
+      puts "Карты диллера: #{@table.dealer.cards[0].value}#{@table.dealer.cards[0].suit} **"
       print "Ваши карты: "
       @table.player.cards.each do |card|
-        print "#{card.value}#{card.mastie} "
+        print "#{card.value}#{card.suit} "
       end
       print "Очки: #{@table.player.points}"
       puts " "
@@ -50,13 +53,13 @@ class Game
 
     print "Карты диллера: "
     @table.dealer.cards.each do |card|
-      print "#{card.value}#{card.mastie} "
+      print "#{card.value}#{card.suit} "
     end
     print "Очки: #{@table.dealer.points}"
     puts " "
     print "Ваши карты: "
     @table.player.cards.each do |card|
-      print "#{card.value}#{card.mastie} "
+      print "#{card.value}#{card.suit} "
     end
     print "Очки: #{@table.player.points}"
     puts " "
