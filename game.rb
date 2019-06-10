@@ -35,8 +35,8 @@ class Game
       print "Очки: #{@table.player.points}"
       puts " "
 
-      self.step_two
-      self.step_three
+      step_two
+      step_three
       break if @table.player.money <= 0 || @table.dealer.money <= 0
     end
 
