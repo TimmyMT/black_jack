@@ -5,7 +5,7 @@ require_relative 'bank.rb'
 class Table
 
   attr_accessor :player, :dealer, :bank
-  attr_reader :winner, :deck, :interrupted
+  attr_reader :winner, :deck
 
   def initialize(name)
     @player = User.new(name)
@@ -28,8 +28,6 @@ class Table
         @dealer.take_card(@deck)
         @player.take_card(@deck)
       end
-
-      score_points
     else
       raise "Users cards not empty"
     end
@@ -37,17 +35,10 @@ class Table
 
   def take_again(user)
     user.take_card(@deck)
-    score_points
   end
 
   def take_again_dealer
     take_again(@dealer) if @dealer.points < 17
-  end
-
-  # Подсчёт очков
-  def score_points
-    @dealer.score
-    @player.score
   end
 
   def who_winner

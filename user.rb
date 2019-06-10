@@ -13,6 +13,7 @@ class User
       random_card = deck.cards.sample
       @cards << random_card
       deck.cards.delete(random_card)
+      score
     else
       raise "This user already have 3 cards"
     end

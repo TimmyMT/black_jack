@@ -53,7 +53,6 @@ class Game
     @table.take_again(@table.player) if action == 1
     @table.take_again_dealer if action == 1 || action == 2
     puts "Диллер взял карту" if @table.dealer.cards.count > 2
-    @table.score_points
 
     print "Карты диллера: "
     @table.dealer.cards.each do |card|
