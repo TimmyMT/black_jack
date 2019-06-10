@@ -52,9 +52,10 @@ class Table
   end
 
   def set_money(value)
-    if value > @player.money || value > @dealer.money
+    if value < 0 || value > @player.money || value > @dealer.money
       raise "У вас нет столько фишек, ставьте меньше" if value > @player.money
       raise "У диллера нет столько фишек, ставьте меньше" if value > @dealer.money
+      raise "Введите положительное число" if value < 0
     else
       @bank.money = value * 2
       @player.money -= value
