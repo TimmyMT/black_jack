@@ -5,7 +5,7 @@ require_relative 'bank.rb'
 class Table
 
   attr_accessor :player, :dealer, :bank
-  attr_reader :winner, :deck
+  attr_reader :winner, :deck, :interrupted
 
   def initialize(name)
     @player = User.new(name)
@@ -70,13 +70,16 @@ class Table
   end
 
   def set_money(value)
-    if value <= @player.money && value <= @dealer.money
+    if value > @player.money || value > @dealer.money
+      raise "Wrong value for money"
+    else
       @bank.money = value * 2
       @player.money -= value
       @dealer.money -= value
-    else
-      raise "Wrong value for money"
     end
+  rescue => e
+    puts "Недостаточно фишек! Ещё раз"
+    set_money(gets.chomp.to_i)
   end
 
   def pay_money
