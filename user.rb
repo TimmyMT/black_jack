@@ -8,9 +8,11 @@ class User
     @points = 0
   end
 
-  def take_card(card)
+  def take_card(deck)
     if @cards.count < 3
-      @cards << card
+      random_card = deck.cards.sample
+      @cards << random_card
+      deck.cards.delete(random_card)
     else
       raise "This user already have 3 cards"
     end

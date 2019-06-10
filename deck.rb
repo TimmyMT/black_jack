@@ -7,10 +7,11 @@ class Deck
   attr_accessor :cards
 
   def initialize
-    @cards = []
+    generate
   end
 
   def generate
+    @cards = []
     SUITS.each do |suit|
       CARDS.each do |value|
         @cards << Card.new(value, suit)

@@ -12,7 +12,6 @@ class Table
     @dealer = User.new
     @bank = Bank.new
     @deck = Deck.new
-    @deck.generate
   end
 
   def clear_round
@@ -20,40 +19,32 @@ class Table
     @player.points = 0
     @dealer.cards.clear
     @dealer.points = 0
-    @deck.cards.clear
     @deck.generate
   end
 
   def start
     if @player.cards.empty? && @dealer.cards.empty?
       2.times do
-        random_card = @deck.cards.sample
-        @dealer.take_card(random_card)
-        @deck.cards.delete(random_card)
-      end
-      2.times do
-        random_card = @deck.cards.sample
-        @player.take_card(random_card)
-        @deck.cards.delete(random_card)
+        @dealer.take_card(@deck)
+        @player.take_card(@deck)
       end
 
-      self.score_points
+      score_points
     else
       raise "Users cards not empty"
     end
   end
 
   def take_again(user)
-    random_card = @deck.cards.sample
-    user.take_card(random_card)
-    @deck.cards.delete(random_card)
-    self.score_points
+    user.take_card(@deck)
+    score_points
   end
 
   def take_again_dealer
     take_again(@dealer) if @dealer.points < 17
   end
 
+  # Подсчёт очков
   def score_points
     @dealer.score
     @player.score
@@ -78,16 +69,11 @@ class Table
       @player.money -= value
       @dealer.money -= value
     end
-  rescue => e
-    puts e.message
-    set_money(gets.chomp.to_i)
   end
 
   def pay_money
-    if @winner == @player
-      @player.money += @bank.money
-    elsif @winner == @dealer
-      @dealer.money += @bank.money
+    if @winner
+      @winner.money += @bank.money
     else
       @player.money += @bank.money / 2
       @dealer.money += @bank.money / 2

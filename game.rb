@@ -19,8 +19,12 @@ class Game
   def play
     loop do
       puts "Делайте ставку!"
-      @money = gets.chomp.to_i
-      @table.set_money(@money)
+      begin
+        @table.set_money(gets.chomp.to_i)
+      rescue => e
+        puts e.message
+        retry
+      end
       puts "Ставка #{@table.bank.money / 2} принята! В банке #{@table.bank.money} фишек"
       @table.start
       puts "Карты диллера: #{@table.dealer.cards[0].value}#{@table.dealer.cards[0].suit} **"
