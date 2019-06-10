@@ -71,14 +71,15 @@ class Table
 
   def set_money(value)
     if value > @player.money || value > @dealer.money
-      raise "Wrong value for money"
+      raise "У вас нет столько фишек, ставьте меньше" if value > @player.money
+      raise "У диллера нет столько фишек, ставьте меньше" if value > @dealer.money
     else
       @bank.money = value * 2
       @player.money -= value
       @dealer.money -= value
     end
   rescue => e
-    puts "Недостаточно фишек! Ещё раз"
+    puts e.message
     set_money(gets.chomp.to_i)
   end
 
