@@ -35,4 +35,8 @@ class User
     @points -= 10 if @points > 21 && have_a
   end
 
+  def cards_count
+    @cards.count
+  end
+
 end
