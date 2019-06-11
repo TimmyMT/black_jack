@@ -36,7 +36,7 @@ class User
   end
 
   def has_money?
-    self.money <= 0
+    money <= 0
   end
 
   def max_cards?
