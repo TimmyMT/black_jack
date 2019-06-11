@@ -32,8 +32,7 @@ class Interface
       @game.player.cards.each do |card|
         print "#{card.name} "
       end
-      print "Очки: #{@game.player.points}"
-      puts " "
+      print "Очки: #{@game.player.points}\n"
 
       step_two
       step_three
@@ -51,21 +50,19 @@ class Interface
     puts "1# Взять ещё карту? 2# Пас 3# Вскрыть карты"
     action = gets.chomp.to_i
     @game.take_again(@game.player) if action == 1
-    @game.take_again_dealer if action == 1 || action == 2
+    @game.take_again_dealer if action != 3
     puts "Диллер взял карту" if @game.dealer.max_cards?
 
     print "Карты диллера: "
     @game.dealer.cards.each do |card|
       print "#{card.name} "
     end
-    print "Очки: #{@game.dealer.points}"
-    puts " "
+    print "Очки: #{@game.dealer.points}\n"
     print "Ваши карты: "
     @game.player.cards.each do |card|
       print "#{card.name} "
     end
-    print "Очки: #{@game.player.points}"
-    puts " "
+    print "Очки: #{@game.player.points}\n"
   end
 
   def step_three
