@@ -35,8 +35,12 @@ class User
     @points -= 10 if @points > 21 && have_a
   end
 
-  def cards_count
-    @cards.count
+  def has_money?
+    self.money <= 0
+  end
+
+  def max_cards?
+    @cards.count == 3
   end
 
 end

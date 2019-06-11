@@ -76,8 +76,4 @@ class Game
     end
   end
 
-  def has_money(user)
-    user.money
-  end
-
 end

@@ -37,12 +37,12 @@ class Interface
 
       step_two
       step_three
-      break if @game.player.money <= 0 || @game.dealer.money <= 0
+      break if @game.player.has_money? || @game.dealer.has_money?
     end
 
-    if @game.has_money(@game.player) <= 0
+    if @game.player.has_money?
       puts "У вас закончились фишки"
-    elsif @game.has_money(@game.dealer) <= 0
+    elsif @game.dealer.has_money?
       puts "У диллера закончились фишки"
     end
   end
@@ -52,7 +52,7 @@ class Interface
     action = gets.chomp.to_i
     @game.take_again(@game.player) if action == 1
     @game.take_again_dealer if action == 1 || action == 2
-    puts "Диллер взял карту" if @game.dealer.cards_count > 2
+    puts "Диллер взял карту" if @game.dealer.max_cards?
 
     print "Карты диллера: "
     @game.dealer.cards.each do |card|
